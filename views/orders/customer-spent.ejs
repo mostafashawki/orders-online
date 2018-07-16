@@ -1,0 +1,45 @@
+<% include ../header %>
+<!-- Orders money spent by customer -->
+
+
+<div class="row">
+              
+    <div class="col-md-8 m-auto">
+        
+      <h3 class="text-center">The amount of money paid per customer</h3>
+    </div>
+  </div>
+  <div class="container-fluid">
+  <table id="myTable" class="table table-dark">
+    <thead>
+      <tr>
+        
+        <th scope="col">Customer Name</th>
+        <th scope="col">Total Money Spent</th>
+        <th scope="col">Currency</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+       
+      <% orders.forEach(function(order){ %>
+
+        <tr>
+           
+            <td><%=order._id.name%></td>
+            <td><%=order.total%></td>
+            <td><%=order._id.currency%></td>
+        </tr>
+        
+      <% }) %>
+
+     
+    </tbody>
+  </table> 
+    
+</div>
+
+
+<% include ../footer %>
+<% include ../bottom %>

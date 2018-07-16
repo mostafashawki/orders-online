@@ -1,0 +1,143 @@
+
+<% include ../header %>
+<!-- Orders details -->
+
+
+        <div class="container">
+               
+          <% include ../errors %>
+          <div class="row">
+              
+            <div class="col-md-8 m-auto">
+                
+              <h1 class="display-4 text-center">Order Details</h1>
+              <p class="lead text-center">You can edit quatity or remove items, then save changes</p>
+              <p><strong>Order Id: </strong><%=order[0].urlId%></p>
+              <p><strong>Customer Id: </strong><%=order[0].customer.urlId%></p>
+              <p><strong>Customer Name: </strong><%=order[0].customer.name%></p>
+              <p><strong>Customer Address: </strong><%=order[0].customer.address%></p>
+                  <table id="myTable" class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">Items</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Total Price</th>
+                        
+                        
+                        
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       <% var orderSum = 0; %>
+                      <% items.forEach(function(item){ %>
+                        <tr id="<%=item.item._id%>" >
+                            
+                            <td><%=item.item.name%></td>
+                            <td id="qty<%=item.item._id%>" class="table-success" contenteditable="true" style="color: black"><%=item.qty%></td>
+                            <td hidden  id="price<%=item.item._id%>"><%= item.tPrice / item.qty %></td>
+                            <td hidden  id="stock<%=item.item._id%>"><%= item.item.stock %></td>
+                            <td hidden><%= item.item._id %></td>
+                            <td><%=item.tPrice%></td>         
+                            <td><a href="JavaScript:void(0);" onclick="deleteRow(this)"><i class="fas fa-minus-circle"></i></a></td>
+                            
+                        </tr>
+                        <% orderSum +=  item.tPrice%>
+                      <% }) %>
+                    </tbody>
+                    <label hidden id="lblCurrency"><%=order[0].currency%></label>
+                    <tfoot><strong><label id="lblSum"><%= orderSum %></label></strong></tfoot>
+                      
+                  </table> 
+
+                  
+                          
+            </div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-md-8 m-auto">
+                <form id="myForm" method="POST" action="/orders/update">
+                  <div class="form-group">
+                    <input type="text" hidden  value="<%=order[0].urlId%>" id="urlId" name="urlId" />
+                  </div>
+                  <div class="form-group">
+                    <input type="text" hidden  id="items" name="items" />
+                  </div>
+
+                  <div class="form-group">
+                    <input type="text" hidden value="<%=order[0].currency%>" id="currency" name="currency" />
+                  </div>
+                  
+                  <input type="button" onclick="editOrder()" value="Save Changes" class="btn btn-info btn-block mt-4" />
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+          
+
+    
+      <% include ../footer %>
+
+     <script>
+     function deleteRow(row) {
+        var i = row.parentNode.parentNode.rowIndex;
+        document.getElementById('myTable').deleteRow(i);
+        
+    }
+
+    function editOrder(){
+      let items = [];
+      let MyTableLength = document.getElementById("myTable").rows.length;
+      if (MyTableLength < 2) {
+                
+                alertify.alert('Warning!','You cannot remove all items, if you want to delete the order go to /orders page!');
+                return false;
+      }
+      
+      //get the edited items
+      for (i = 1; i < MyTableLength; i++) {
+              let qty = Number(document.getElementById("myTable").rows[i].cells[1].textContent);
+              let price = Number(document.getElementById("myTable").rows[i].cells[2].textContent);
+              let stock = Number(document.getElementById("myTable").rows[i].cells[3].textContent);
+              let id = document.getElementById("myTable").rows[i].cells[4].textContent;
+              let tPrice = qty * price;
+              if(qty > stock){
+                alertify.alert('Warning!','Out of stock!');
+                  return;
+              }
+              if(qty == undefined || qty < 1){
+                alertify.alert('Warning!','Quanity must be 1 or more!');
+                  return;
+              }
+              items.push({item: id, qty, tPrice}) ;
+              
+              
+                
+      }
+      
+              let myJSON = JSON.stringify(items);
+              document.getElementById('items').value = myJSON;
+              document.getElementById("myForm").submit();
+
+
+    }
+
+    //format prices with accounting.js
+    window.onload = function (){
+            let MyTableLength = document.getElementById("myTable").rows.length;
+            let currency = document.getElementById('lblCurrency').innerHTML;
+            let sum =document.getElementById('lblSum').innerHTML;
+            document.getElementById('lblSum').innerHTML = 'Order Total: '+accounting.formatMoney(sum, { symbol: currency,  format: "%v %s" });
+            for (i = 1; i < MyTableLength; i++) {
+              let unformattedPrice = document.getElementById("myTable").rows[i].cells[5].textContent;
+              document.getElementById("myTable").rows[i].cells[5].textContent = accounting.formatMoney(unformattedPrice, { symbol: currency,  format: "%v %s" });
+            }
+          }
+     </script>
+
+
+<% include ../bottom %>

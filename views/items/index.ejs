@@ -1,0 +1,53 @@
+
+<% include ../header %>
+<!-- Items -->
+
+        <div class="container">
+
+          <% include ../errors %>
+
+          <div class="row">
+              <a href="/orders/items-ordered" title="Items ordered"><i class="fas fa-money-bill-alt fa-2x"></i></a>
+            <div class="col-md-8 m-auto">
+                <h3 class="text-center">All Items</h3>
+              </div>
+                  <table id="myTable" class="table table-dark">
+                    <thead>
+                      <tr>
+                        <!-- <th hidden scope="col">#</th> -->
+                        <th scope="col">Items Name</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Currency</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                      <% items.forEach(function(item){ %>
+                        <tr>
+                            <td><%=item.name%></td>
+                            <td><%=item.stock%></td>
+                            <td><%= item.price %></td>
+                            <td><%= item.currency %></td>
+                            <td><a title="Customer(s) bought this item" href="/orders/item/<%=item.urlId%>"><i class="fas fa-user"></i></a></td>
+                            
+                        </tr>
+                         
+                      <% }) %>
+                
+                     
+                    </tbody>
+                    <tfoot>
+                      
+                    </tfoot>
+                  </table>
+
+            
+          </div>
+          
+        </div>
+
+    
+        <% include ../footer %>
+        <% include ../bottom %>

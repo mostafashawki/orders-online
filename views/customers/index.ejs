@@ -1,0 +1,83 @@
+
+<% include ../header %>
+<!-- Customers -->
+
+        <div class="container">
+
+            <% include ../errors %>
+
+          <div class="row">
+             <p> <a href="/customers/create" title="Create New Customer"><i class="fas fa-plus-circle fa-2x"></i></a>
+              <br />
+              <a href="/orders/customer-spent" title="The amount of money paid per customer"><i class="fas fa-money-bill-alt fa-2x"></i></a>
+            </p>
+              
+              
+              <div class="col-md-8 m-auto">
+                  <h3 class="text-center">All Customers </h3>
+              </div>
+               
+                  
+                  <table class="table table-dark">
+                    <thead>
+                      <tr>
+                        <!-- <th hidden scope="col">#</th> -->
+                        <th scope="col">Email</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Currency</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                      <% customers.forEach(function(customer){ %>
+                        <tr>
+                            <!-- <th hidden scope="row"><%=customer._id%></th> -->
+                            <td><%=customer.email%></td>
+                            <td><%=customer.name%></td>
+                            <td><%=customer.address%></td>
+                            <td><%=customer.currency%></td>
+                            <td><a href="/customers/update/<%=customer.urlId%>" title="Edit Customer"><i class="fas fa-edit"></i></a>
+                            | <a href="JavaScript:void(0);" title="Delete Customer" onclick="goDelete('<%=customer.urlId%>')" title="Delete Customer"><i class="fas fa-trash"></i></a>
+                            | <a  href="/orders/create/<%=customer.urlId%>/<%=customer.name%>/<%=customer.currency%>" title="Create New Order"><i class="fas fa-cart-plus"></i></a>
+                            | <a  href="/orders/customer/<%=customer.urlId%>" title="All Order(s)"><i class="fas fa-file-invoice-dollar"></i></a>
+                            | <a title="Orders from this address" href="/orders/address/<%=customer.address%>"><i class="fas fa-map-marker-alt"></i></a>
+                            </td>
+                        </tr>
+                         
+                      <% }) %>
+                     
+                     
+                    </tbody>
+                  </table>
+
+                  <form hidden id="DeleteForm" method="POST" action="/customer-delete">
+                    <input type="text" id="delUrlId" name="urlId"><br><br>
+                    <!-- <input type="button" onclick="myFunction()" value="Submit form"> -->
+                  </form>
+                  
+                
+            
+          </div>
+
+        </div>
+
+    
+      <% include ../footer %>
+
+      <script>
+      function goDelete(id){
+        //alert(id);
+        alertify.confirm('Are you sure, you want to delete this customer?',() => { 
+          alertify.success('Ok');
+          document.getElementById('delUrlId').value = id;
+          document.getElementById("DeleteForm").submit();
+        });
+        
+      }
+      </script>
+
+    <% include ../bottom %>
+      
+   

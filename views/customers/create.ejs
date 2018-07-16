@@ -1,0 +1,38 @@
+<% include ../header %>
+<!-- Customers Create -->
+<div class="container">
+
+        <% include ../errors %>
+
+        <div class="row">
+                <div class="col-md-8 m-auto">
+                  <h1 class="display-4 text-center">Customers</h1>
+                  <p class="lead text-center">Create New Customer</p>
+                  <form method="POST" action="/customers/create">
+                    <div class="form-group">
+                      <input type="email" value="" class="form-control form-control-lg" placeholder="Customer Email" name="email" />
+                    </div>
+                    <div class="form-group">
+                      <input type="text" value="" class="form-control form-control-lg" placeholder="Customer Full Name" name="name" />
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-lg" placeholder="Customer Address" name="address" />
+                    </div>
+                    <div class="form-group">
+                        <label for="sel1">Select Currency:</label>
+                        <select class="form-control" name="currency">
+                          <option>USD</option>
+                          <option>EUR</option>
+                          <option>GBP</option>
+                          <option>CAD</option>
+                        </select>
+                      </div>
+                    <input type="submit" class="btn btn-info btn-block mt-4" />
+                  </form>
+                </div>
+              </div>
+
+</div>
+
+<% include ../footer %>
+<% include ../bottom %>

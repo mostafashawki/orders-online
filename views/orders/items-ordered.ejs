@@ -1,0 +1,47 @@
+
+<% include ../header %>
+<!-- How many times item(s) have been ordered -->
+
+        <div class="container">
+
+          <% include ../errors %>
+
+          <div class="row">
+               
+            <div class="col-md-8 m-auto">
+                <h3 class="text-center">How many times item(s) have been ordered</h3>
+              </div>
+                  <table id="myTable" class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">Items Name</th>
+                        <th scope="col">Times Ordered</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                      <% items.forEach(function(item){ %>
+                        <tr>
+                            <td><%=item._id.name%></td>
+                            <td><%=item.count%></td>
+                            <td><%=item._id.currency%></td>
+                            
+                        </tr>
+                         
+                      <% }) %>
+                
+                     
+                    </tbody>
+                    <tfoot>
+                      
+                    </tfoot>
+                  </table>
+
+            
+          </div>
+          
+        </div>
+
+        <% include ../footer %>
+        <% include ../bottom %>

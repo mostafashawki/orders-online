@@ -1,0 +1,114 @@
+
+<% include ../header %>
+<!-- New Orders -->
+
+        <div class="container">
+          <% include ../errors %>
+
+         
+          <div class="row">
+            <div class="col-md-8 m-auto">
+                <h3 class="text-center">Create New Order</h3>
+                <h5 class="text-center">Customer Name: <%=name%></h5>
+                <h5 class="text-center">Order Currency: <label id="lblCurrency"><%=currency%></label> </h5>
+              <h5 class="text-center">Select Item(s)</h5>
+             
+                  <table id="myTable" class="table table-dark">
+                    <thead>
+                      <tr>
+                        <!-- <th hidden scope="col">#</th> -->
+                        <th scope="col">Name</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Qty</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                       
+                      <% items.forEach(function(item){ %>
+                        <tr id="tr<%=item.urlId%>">
+                            <td><%=item.name%></td>
+                            <td id="stock<%=item.urlId%>"><%=item.stock%></td>
+                            <td><%= item.price * rate %></td>
+                            <td hidden id="price<%=item.urlId%>"><%= item.price * rate %></td>
+                            <td id="qty<%=item.urlId%>" style="color: black" class="table-success" contenteditable="true"></td>
+                            <td><a href="JavaScript:void(0);" onclick="addItems('<%=item.urlId%>')"><i class="fas fa-plus-circle"></i></a></td>
+                        </tr>
+                         
+                      <% }) %>
+                
+                     
+                    </tbody>
+                    <tfoot>
+                      
+                    </tfoot>
+                  </table>
+
+                  <div class="row">
+                        <div class="col-md-8 m-auto">
+                          <form method="POST" action="/orders/create">
+                            <div class="form-group">
+                              <input type="text" hidden class="form-control form-control-lg" value="<%=urlId%>" id="customer" name="customer" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" hidden class="form-control form-control-lg" value="<%=currency%>" id="currency" name="currency" />
+                              </div>
+                            <div class="form-group">
+                              <input type="text" hidden class="form-control form-control-lg" id="items" name="items" />
+                            </div>
+                            
+                            <input type="submit" value="submit your order" class="btn btn-info btn-block mt-4" />
+                          </form>
+                        </div>
+                      </div>
+                          
+            </div>
+          </div>
+          
+        </div>
+
+    
+      <% include ../footer %>
+
+      <script>
+
+          //fill items
+          let items = [];
+          function addItems (id){
+            let qty = Number(document.getElementById('qty'+id).innerHTML);
+            let stock = Number(document.getElementById('stock'+id).innerHTML);
+            let price = Number(document.getElementById('price'+id).innerHTML);
+            let tPrice = qty * price;
+             
+            if(qty > stock){
+              alertify.alert('Out of stock!');
+                return;
+            }
+            if(qty < 1 || qty >99){
+              
+              alertify.alert('Quantity range between 1 and 99');
+                return;
+            }
+
+            items.push({item: id, qty, tPrice}) ;
+            document.getElementById('tr'+id).className = 'table-success';
+            let myJsonOrder = JSON.stringify(items);
+            document.getElementById('items').value = myJsonOrder;
+            
+          }
+
+          //format the prices with accounting.js
+          window.onload = function (){
+            let MyTableLength = document.getElementById("myTable").rows.length;
+            let currency = document.getElementById('currency').value;
+            for (i = 1; i < MyTableLength; i++) {
+              let unformattedPrice = document.getElementById("myTable").rows[i].cells[2].textContent;
+              document.getElementById("myTable").rows[i].cells[2].textContent = accounting.formatMoney(unformattedPrice, { symbol: currency,  format: "%v %s" });
+            }
+          }
+      
+      </script>
+
+
+<% include ../bottom %>

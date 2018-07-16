@@ -1,0 +1,60 @@
+<% include ../header %>
+<!-- Orders from a specific customer -->
+
+
+<div class="row">
+              
+    <div class="col-md-8 m-auto">
+        
+      <h3 class="display-4 text-center">All Orders</h3>
+      <p><strong>For Customer Name: </strong><%=name%></p> 
+     
+    </div>
+  </div>
+  <div class="container-fluid">
+  <table id="myTable" class="table table-dark">
+    <thead>
+      <tr>
+        <!-- <th hidden scope="col">#</th> -->
+        <th scope="col">#</th>
+        <th scope="col">Item(s) Name</th>
+        <th scope="col">Order Total</th>
+        <th scope="col">Currency</th>
+        <th></th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+       <% var itemName =''; %>
+      <% orders.forEach(function(order){ %>
+
+        <tr id="tr<%=order._id%>">
+           
+            <td><%=order.urlId%></td>
+            <td>
+            <% for(var i = 0; i< order.items.length; i++){ %>                    
+              <% itemName += order.items[i].item.name %>
+              <ul><li><%=itemName%></li></ul>
+               <!-- reset itemName every row -->
+              <% itemName ='' %>
+             <% } %>
+            </td>
+            
+            <td><%=order.currency%></td>
+            <td><a href="/orders/details/<%=order.urlId%>" title="Order Details"><i class="fas fa-list"></i></a>
+        </tr>
+        
+      <% }) %>
+
+     
+    </tbody>
+  </table> 
+    
+</div>
+
+
+<% include ../footer %>
+<% include ../bottom %>
+
+ 

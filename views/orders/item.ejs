@@ -1,0 +1,65 @@
+
+<% include ../header %>
+<!-- All Customer(s) that bought a certain item -->
+
+
+        <div class="container">
+            <% include ../errors %>
+                    </div> 
+          <div class="row">
+              
+            <div class="col-md-8 m-auto">
+                
+              <h3 class="text-center">All Customer(s) that bought:</h3>
+              <h5 class="text-center"><%=itemName%></h5>
+             
+            </div>
+          </div>
+          <div class="container-fluid">
+          <table id="myTable" class="table table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Order #</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Customer Address</th>
+                <th scope="col">Item(s) Name</th>
+                
+                
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+               <% var itemName =''; %>
+              <% orders.forEach(function(order){ %>
+       
+                <tr id="tr<%=order._id%>">
+                   
+                    <td><%=order.urlId%></td>
+                    <td><%=order.customer.name%></td>
+                    <td><%=order.customer.address%></td>
+                    <td>
+                    <% for(var i = 0; i< order.items.length; i++){ %>                    
+                      <% itemName += order.items[i].item.name %>
+                      <ul><li><%=itemName%></li></ul>
+                       <!-- reset itemName every row -->
+                      <% itemName ='' %>
+                     <% } %>
+                    </td>
+                    
+                   
+                    <td><a href="/orders/details/<%=order.urlId%>" title="Order Details"><i class="fas fa-list"></i></a>
+                    </td>
+                </tr>
+                
+              <% }) %>
+        
+             
+            </tbody>
+          </table> 
+            
+        </div>
+
+        <% include ../footer %>
+        <% include ../bottom %>
+      
+      
